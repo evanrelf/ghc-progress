@@ -1,0 +1,32 @@
+cabal-version: 2.2
+
+name:        ghc-progress
+version:     0.1.0.0
+synopsis:    Progress bar for GHC compilation
+description: Progress bar for GHC compilation
+author:      Evan Relf <evan@evanrelf.com>
+maintainer:  Evan Relf <evan@evanrelf.com>
+homepage:    https://github.com/evanrelf/ghc-progress
+license:     ISC
+copyright:   2023 Evan Relf
+
+executable ghc-progress
+  build-depends: base
+  default-language: Haskell2010
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Werror=incomplete-patterns
+    -Werror=incomplete-record-updates
+    -Werror=incomplete-uni-patterns
+    -Werror=missing-fields
+    -Werror=missing-methods
+    -Werror=partial-fields
+    -Widentities
+    -Wmissing-home-modules
+    -Wredundant-constraints
+    -threaded
+    -rtsopts
+    -with-rtsopts=-N
+  hs-source-dirs: src
+  main-is: Main.hs

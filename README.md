@@ -32,3 +32,10 @@ flag:
 $ cabal build |& ghc-progress --quiet
 [ 4 of 28] Compiling ShellCheck.AST
 ```
+
+To preserve colored output, you can either:
+
+- Wrap your build command with `unbuffer` from the `expect` package
+
+- Pass `-fdiagnostics-color=always` to GHC or
+  `--ghc-options='-fdiagnostics-color=always'` to Cabal

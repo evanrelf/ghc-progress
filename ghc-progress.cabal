@@ -21,6 +21,7 @@ executable ghc-progress
     , bytestring
     , flatparse > 0.4
     , fusion-plugin
+    , optparse-applicative
     , streamly-bytestring
     , streamly-core
     , text

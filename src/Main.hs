@@ -1,5 +1,7 @@
+{-# LANGUAGE ApplicativeDo #-}
 {-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE Strict #-}
 {-# LANGUAGE TemplateHaskell #-}
@@ -21,12 +23,12 @@ import qualified Data.IORef as IORef
 import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Text
 import qualified FlatParse.Basic as FlatParse
+import qualified Options.Applicative as Options
 import qualified Streamly.Console.Stdio as Stdio
 import qualified Streamly.Data.Fold as Fold
 import qualified Streamly.Data.Stream as Stream
 import qualified Streamly.External.ByteString as ByteString
 import qualified System.Console.ANSI as AnsiTerminal
-import qualified System.Environment as Environment
 
 isNewline :: Word8 -> Bool
 isNewline = (== (fromIntegral . Char.ord) '\n')
@@ -65,11 +67,27 @@ formatLine Progress{ progress, total, moduleName } =
 whenJust :: Applicative f => Maybe a -> (a -> f ()) -> f ()
 whenJust m k = maybe (pure ()) k m
 
+data Options = Options
+  { quiet :: !Bool
+  }
+
+parseOptions :: Options.Parser Options
+parseOptions = do
+  quiet <-
+    Options.switch . mconcat $
+      [ Options.long "quiet"
+      , Options.help "Suppress logging, only show progress bar"
+      ]
+
+  pure Options{ quiet }
+
+getOptions :: IO Options
+getOptions =
+  Options.execParser $ Options.info (Options.helper <*> parseOptions) mempty
+
 main :: IO ()
 main = do
-  args <- Environment.getArgs
-
-  let quiet = args == ["--quiet"]
+  options <- getOptions
 
   prevProgressIORef <- IORef.newIORef Nothing
 
@@ -99,7 +117,7 @@ main = do
             ByteString.putStr progress
 
           _ ->
-            when (not quiet) do
+            when (not options.quiet) do
               clearPrevProgress
               ByteString.putStr $ bytes `Char8.snoc` '\n'
               restorePrevProgress

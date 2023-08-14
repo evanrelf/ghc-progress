@@ -1,5 +1,6 @@
 {-# LANGUAGE ApplicativeDo #-}
 {-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -9,26 +10,25 @@
 module Main (main) where
 
 import Control.Monad (when)
+import Data.ByteString qualified as ByteString
+import Data.ByteString.Char8 qualified as Char8
+import Data.Char qualified as Char
 import Data.Function ((&))
+import Data.IORef qualified as IORef
 import Data.Text (Text)
+import Data.Text qualified as Text
+import Data.Text.Encoding qualified as Text
 import Data.Word (Word8)
+import FlatParse.Basic qualified as FlatParse
+import Options.Applicative qualified as Options
+import Streamly.Console.Stdio qualified as Stdio
 import Streamly.Data.Fold (Fold)
+import Streamly.Data.Fold qualified as Fold
 import Streamly.Data.Stream (Stream)
+import Streamly.Data.Stream qualified as Stream
+import Streamly.External.ByteString qualified as ByteString
+import System.Console.ANSI qualified as AnsiTerminal
 import Text.Printf (printf)
-
-import qualified Data.ByteString as ByteString
-import qualified Data.ByteString.Char8 as Char8
-import qualified Data.Char as Char
-import qualified Data.IORef as IORef
-import qualified Data.Text as Text
-import qualified Data.Text.Encoding as Text
-import qualified FlatParse.Basic as FlatParse
-import qualified Options.Applicative as Options
-import qualified Streamly.Console.Stdio as Stdio
-import qualified Streamly.Data.Fold as Fold
-import qualified Streamly.Data.Stream as Stream
-import qualified Streamly.External.ByteString as ByteString
-import qualified System.Console.ANSI as AnsiTerminal
 
 isNewline :: Word8 -> Bool
 isNewline = (== fromIntegral (Char.ord '\n'))

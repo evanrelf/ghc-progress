@@ -31,7 +31,7 @@ import qualified Streamly.External.ByteString as ByteString
 import qualified System.Console.ANSI as AnsiTerminal
 
 isNewline :: Word8 -> Bool
-isNewline = (== (fromIntegral . Char.ord) '\n')
+isNewline = (== fromIntegral (Char.ord '\n'))
 
 splitOn :: (a -> Bool) -> Fold IO a b -> Stream IO a -> Stream IO b
 splitOn p f = Stream.foldMany (Fold.takeEndBy_ p f)
